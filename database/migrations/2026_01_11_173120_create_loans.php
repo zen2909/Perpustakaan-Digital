@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->dateTime('due_date')->nullable();
             $table->dateTime('return_date')->nullable();
             $table->enum('status', ['pending', 'approved', 'borrowed', 'returned', 'overdue'])->default('pending');
-            $table->foreignId('approved_by')->constrained('users')->nullOnDelete();
+            $table->foreignId('approved_by')->nullable()->constrained('users')->nullOnDelete();
             $table->decimal('fine_amount', 10, 2)->default(0);
             $table->index('user_id');
             $table->index('book_id');

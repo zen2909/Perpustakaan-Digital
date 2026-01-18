@@ -24,10 +24,25 @@ Route::middleware('auth')->group(function () {
         Route::delete('/books/{book}', [BookController::class, 'destroy'])
             ->name('books.destroy');
     });
+
     Route::middleware('role:admin,librarian')->group(function () {
         Route::resource('books', BookController::class)->except(['destroy']);
     });
 
+    Route::middleware(['role:admin,librarian'])
+        ->prefix('admin/loans')
+        ->name('admin.loans.')
+        ->group(function () {
+
+            Route::post('{loan}/approve', [LoanApprovalController::class, 'approve'])
+                ->name('approve');
+
+            Route::post('{loan}/borrow', [LoanApprovalController::class, 'borrow'])
+                ->name('borrow');
+
+            Route::post('{loan}/return', [LoanApprovalController::class, 'return'])
+                ->name('return');
+        });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

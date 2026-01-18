@@ -47,4 +47,10 @@ class Book extends Model
     {
         return 'slug';
     }
+
+    public function scopeAvailable($query)
+    {
+        return $query->where('available_stock', '>', 0);
+    }
+
 }

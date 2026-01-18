@@ -96,8 +96,6 @@ class BookController extends Controller
             $imagepath = $request->file('cover_image')->store('books', 'public');
         }
 
-        $available_stock = $request->stock ?? 0;
-
 
         $book = Book::create([
             'title' => $request->title,
@@ -110,7 +108,7 @@ class BookController extends Controller
             'description' => $request->description,
             'cover_image' => $imagepath,
             'stock' => $request->stock,
-            'available_stock' => $available_stock,
+            'available_stock' => $request->stock,
         ]);
 
         $book->categories()->attach($request->categories_id);
@@ -155,7 +153,7 @@ class BookController extends Controller
             'pages' => 'nullable|integer',
             'description' => 'nullable|string',
             'cover_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'stock' => 'required|integer|min:0',
+            'stock' => 'required|integer|min:' . $book->available_stock,
         ]);
 
 
@@ -176,8 +174,21 @@ class BookController extends Controller
             $imagepath = $request->file('cover_image')->store('books', 'public');
         }
 
-        $available_stock = $request->stock ?? 0;
+        $oldStock = $book->stock;
+        $newStock = $request->stock;
 
+        // hitung jumlah buku yang sedang dipinjam
+        $borrowed = $oldStock - $book->available_stock;
+
+        // pastikan stok baru tidak kurang dari yang dipinjam
+        if ($newStock < $borrowed) {
+            return back()->withErrors([
+                'stock' => 'Stok tidak boleh lebih kecil dari jumlah buku yang sedang dipinjam'
+            ]);
+        }
+
+        // hitung available_stock baru
+        $newAvailableStock = $newStock - $borrowed;
 
         $book->update([
             'title' => $request->title,
@@ -190,7 +201,7 @@ class BookController extends Controller
             'description' => $request->description,
             'cover_image' => $imagepath,
             'stock' => $request->stock,
-            'available_stock' => $available_stock,
+            'available_stock' => $newAvailableStock,
         ]);
 
         $book->categories()->sync($request->categories_id);

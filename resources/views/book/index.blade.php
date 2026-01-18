@@ -20,8 +20,8 @@
                             <select name="author">
                                 <option value="">Semua Penulis</option>
                                 @foreach ($authors as $author)
-                                    <option
-                                        value="{{ $author->id }} {{ request('author') == $author->id ? 'selected' : '' }}">
+                                    <option value="{{ $author->id }}""
+                                        {{ request('author') == $author->id ? 'selected' : '' }}>
                                         {{ $author->name }}</option>
                                 @endforeach
                             </select>
@@ -29,8 +29,8 @@
                             <select name="category">
                                 <option value="">Semua Kategori</option>
                                 @foreach ($categories as $category)
-                                    <option
-                                        value="{{ $category->id }} {{ request('category') == $category->id ? 'selected' : '' }}">
+                                    <option value="{{ $category->id }}""
+                                        {{ request('category') == $category->id ? 'selected' : '' }}>
                                         {{ $category->name }}</option>
                                 @endforeach
                             </select>
@@ -99,13 +99,20 @@
                                 </td>
                                 <td class="border px-2 py-1 text-center">
                                     <img src="{{ $book->cover_image ? asset('storage/' . $book->cover_image) : asset('images/placeholder.png') }}"
-                                        alt="cover_image" class="w-6 h-auto">
+                                        alt="cover_image" class="container mx-auto w-20 h-auto">
                                 </td>
                                 <td class="border px-2 py-1 text-center">
                                     {{ $book->stock }}
                                 </td>
                                 <td class="border px-2 py-1 text-center">
-                                    {{ $book->available_stock }}
+                                    @if ($book->available_stock > 0)
+                                        <span
+                                            class="inline-flex items-center rounded-lg bg-green-100 px-2 py-1 text-xs font-medium text-green-700 inset-ring inset-ring-green-600/20">Tersedia</span>
+                                    @else
+                                        <span
+                                            class="inline-flex items-center rounded-lg bg-red-100 px-2 py-1 text-xs font-medium text-green-700 inset-ring inset-ring-green-600/20">Tidak
+                                            Tersedia</span>
+                                    @endif
                                 </td>
                                 <td class="border px-2 py-1 text-center space-x-2">
                                     <a href="{{ route('books.show', $book) }}" class="text-blue-600">Detail</a>

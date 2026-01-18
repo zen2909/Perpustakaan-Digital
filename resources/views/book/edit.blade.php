@@ -80,6 +80,12 @@
                         <div class="flex
                                     flex-col px-2 py-1 mb-2">
                             <label class="text-2xl font-bold  mb-2">Stok</label>
+                            <p class="text-sm text-gray-600">
+                                Sedang dipinjam: {{ $book->stock - $book->available_stock }}
+                            </p>
+                            <p class="text-sm text-gray-500">
+                                Stok tidak boleh kurang dari jumlah yang sedang dipinjam
+                            </p>
                             <input type="number" name="stock" value="{{ old('stock', $book->stock) }}">
                         </div>
 
@@ -87,7 +93,12 @@
 
                     <div class="flex flex-col border px-2 py-1 mb-2">
                         <label class="text-2xl font-bold  mb-2">Gambar Sampul</label>
-                        <img src="{{ asset('storage/' . $book->cover_image) }}" alt="cover_image">
+                        @if ($book->cover_image)
+                            <img src="{{ asset('storage/' . $book->cover_image) }}" class="w-32 mb-2">
+                        @else
+                            <p class="text-gray-500">Belum ada gambar</p>
+                        @endif
+
                         <input type="file" name="cover_image">
                     </div>
 
@@ -102,6 +113,16 @@
 
                 </form>
             </div>
+            @if ($errors->any())
+                <div class="bg-red-100 text-red-700 p-3 mb-4">
+                    <ul class="list-disc pl-5">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
         </section>
     </div>
 </x-app-layout>
