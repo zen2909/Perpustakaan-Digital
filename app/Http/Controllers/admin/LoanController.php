@@ -69,7 +69,7 @@ class LoanController extends Controller
             'fine_amount' => 0,
             'qr_token' => Str::uuid(),
         ]);
-        return back()->with('success', 'Permintaan peminjaman berhasil dikirim, menunggu approval admin');
+        return redirect()->route('members.loan')->with('success', 'Permintaan peminjaman berhasil dikirim, menunggu approval admin');
 
     }
 
@@ -88,12 +88,8 @@ class LoanController extends Controller
             return response('data peminjaman tidak ditemukan');
         }
 
-        if ($data->status == 'returned') {
-            return response('Buku sudah dikembalikan');
-        }
-
-        if ($data->status == 'borrowed' || $data->status == 'overdue') {
-            $this->loanservice->return($data);
+        if ($data->status == 'approved') {
+            $this->loanservice->borrow($data);
             return response('QR valid');
         } else {
             return response('QR tidak valid');
