@@ -93,20 +93,21 @@
                                                     <button class="btn" onclick="my_modal_3.showModal()"><span
                                                             class="iconify w-12 h-12 bg-blue-400 rounded-lg p-2"
                                                             data-icon="grommet-icons:qr"></span></button>
-                                                    <dialog id="my_modal_3" class="modal">
-                                                        <div class="modal-box p-20 ">
+                                                    <dialog id="my_modal_3" class="modal rounded-xl">
+                                                        <div class="modal-box p-20 overflow-hidden">
                                                             <form method="dialog">
                                                                 <button
-                                                                    class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                                                                    class="btn btn-sm btn-circle btn-ghost absolute right-5 top-5"><span
+                                                                        class="iconify w-8 h-8 text-red-500"
+                                                                        data-icon="mdi:cancel-bold"></span></button>
                                                             </form>
                                                             <div class="flex flex-col items-center gap-1">
-                                                                <span class="text-xs font-medium">QR Peminjaman</span>
+                                                                <span class="text-xl font-medium">QR Peminjaman</span>
                                                                 <img src="{{ $loan->qr_path ? asset('storage/' . $loan->qr_path) : asset('images/placeholder.png') }}"
-                                                                    alt="QR" class="w-20 h-20">
-                                                                <span class="text-xs font-medium">Tunjukkan QR code ini kepada
+                                                                    alt="QR" class="w-64 h-64">
+                                                                <span class="text-xl font-medium">Tunjukkan QR code ini kepada
                                                                     petugas</span>
                                                             </div>
-
                                                         </div>
                                                     </dialog>
                                                 </div>
