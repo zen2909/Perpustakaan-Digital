@@ -19,6 +19,15 @@
                     <div class="p-4 bg-blue-400 max-w-sm">
                         <a href={{ route('categories.index') }} class="flex justify-center">Manajemen Kategori</a>
                     </div>
+                    <div class="p-4 bg-blue-400 max-w-sm">
+                        <a href={{ route('members.catalog') }} class="flex justify-center">Katalog Buku</a>
+                    </div>
+                    <div class="p-4 bg-blue-400 max-w-sm">
+                        <a href={{ route('members.loan') }} class="flex justify-center">Peminjaman Saya</a>
+                    </div>
+                    <div class="p-4 bg-blue-400 max-w-sm">
+                        <a href={{ route('admin.loans.index') }} class="flex justify-center">Manajemen Peminjaman</a>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\admin;
 
 use App\Models\Loan;
 use App\Services\LoanService;
@@ -13,9 +13,10 @@ class LoanApprovalController extends Controller
     {
     }
 
-    public function approved(Loan $loan): RedirectResponse
+    public function approve(Loan $loan): RedirectResponse
     {
         $this->loanservice->approve($loan, auth()->id());
+        $this->loanservice->sendApprovalMail($loan);
 
         return back()->with('success', 'Peminjaman Telah di Konfirmasi.');
     }
@@ -25,10 +26,18 @@ class LoanApprovalController extends Controller
 
         return back()->with('success', 'Buku Telah Dipinjam.');
     }
-    public function return(Loan $loan): RedirectResponse
+    public function returnBook(Loan $loan): RedirectResponse
     {
-        $this->loanservice->approve($loan);
+        $this->loanservice->returnBook($loan);
 
         return back()->with('success', 'Buku Telah Dikembalikan.');
     }
+
+    public function markAsOverdue(Loan $loan): RedirectResponse
+    {
+        foreach ($loan as $loan => $index) {
+            $this->loanservice->markAsOverdue($loan);
+        }
+    }
+
 }

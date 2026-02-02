@@ -8,15 +8,11 @@
 
     <div class="p-6">
         <section class="container mx-auto">
-            <div class="mb-4 flex ">
-
-            </div>
             <div class="grid grid-cols-[1fr_auto] mb-4 justify-end">
                 <div class="flex justify-start">
                     <form action="{{ route('books.index') }}" method="GET" class="flex">
                         <div>
-                            <input type="search" name="search" placeholder="Cari Buku"
-                                value="{{ request('search') }}">
+                            <input type="search" name="search" placeholder="Cari Buku" value="{{ request('search') }}">
                             <select name="author">
                                 <option value="">Semua Penulis</option>
                                 @foreach ($authors as $author)

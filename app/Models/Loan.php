@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Book;
+use App\Models\User;
 
 class Loan extends Model
 {
@@ -17,5 +20,26 @@ class Loan extends Model
         'status',
         'approved_by',
         'fine_amount',
+        'qr_path',
+        'qr_token',
+        'overdue_notified_at'
     ];
+
+    protected $casts = [
+        'loan_date' => 'datetime',
+        'due_date' => 'datetime',
+        'return_date' => 'datetime',
+        'overdue_notified_at' => 'datetime',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function book()
+    {
+        return $this->belongsTo(Book::class);
+    }
+
 }
