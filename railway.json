@@ -3,7 +3,7 @@
     "build": {
         "builder": "NIXPACKS",
         "config": {
-            "phpVersion": "8.4.0"
+            "phpVersion": "8.5.0"
         },
         "buildCommand": "composer install --no-dev --optimize-autoloader && php artisan optimize:clear"
     },
