@@ -31,20 +31,16 @@ Route::middleware('auth')->group(function () {
         ->name('admin.loans.')
         ->group(function () {
 
-            Route::post('/scan-qr', [LoanController::class, 'scanQr'])
-                ->name('scan-qr');
-
             Route::get('/', [LoanController::class, 'loan'])
                 ->name('index');
-
-            Route::post('/{loan}/approve', [LoanApprovalController::class, 'approve'])
+            Route::post('/{loan}/approve', [LoanController::class, 'approve'])
                 ->name('approve');
-            Route::post('/{loan}/borrow', [LoanApprovalController::class, 'borrow'])
-                ->name('borrow');
-            Route::post('/{loan}/return', [LoanApprovalController::class, 'return'])
-                ->name('return');
             Route::delete('/{loan}/destroy', [LoanController::class, 'destroy'])
                 ->name('destroy');
+            Route::post('/scan-loan', [LoanController::class, 'scanLoan'])
+                ->name('scan-loan');
+            Route::post('/scan-return', [LoanController::class, 'scanReturn'])
+                ->name('scan-return');
         });
 
     Route::middleware('role:member')->group(function () {

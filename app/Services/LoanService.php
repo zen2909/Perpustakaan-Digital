@@ -34,7 +34,7 @@ class LoanService
 
         $writer = new Writer($renderer);
 
-        $qrContent = 'loan:' . $loan->qr_token;
+        $qrContent = $loan->qr_token;
 
         $qrImage = $writer->writeString($qrContent);
 
@@ -65,10 +65,30 @@ class LoanService
                 'status' => 'Loan must be approved to borrow.'
             ]);
         }
+
+        $renderer = new ImageRenderer(
+            new RendererStyle(400),
+            new ImagickImageBackEnd()
+        );
+
+        $token_return = Str::uuid();
+
+        $writer = new Writer($renderer);
+
+        $qrContent = $token_return;
+
+        $qrImage = $writer->writeString($qrContent);
+
+        $qrPath = 'qr/loans/loan-' . $token_return . '.png';
+
+        Storage::disk('public')->put($qrPath, $qrImage);
+
         $loan->update([
             'status' => 'borrowed',
             'loan_date' => now(),
-            'due_date' => now()->addDays(config('library.loan_duration', default: 14)),
+            'due_date' => now()->addMinutes(config('library.loan_duration_testing')),
+            'qr_path' => $qrPath,
+            'token_return' => $token_return,
         ]);
 
         return $loan;

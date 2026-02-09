@@ -22,6 +22,7 @@ class Loan extends Model
         'fine_amount',
         'qr_path',
         'qr_token',
+        'token_return',
         'overdue_notified_at'
     ];
 

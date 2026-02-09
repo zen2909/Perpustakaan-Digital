@@ -62,7 +62,7 @@
 
                                         @case('returned')
                                             <span
-                                                class="inline-flex w-20 h-7 justify-center items-center rounded-xL px-2 py-1 text-sm text-white font-medium bg-slate-500">
+                                                class="inline-flex w-20 h-7 justify-center items-center rounded-xl px-2 py-1 text-sm text-white font-medium bg-slate-500">
                                                 Returned</span>
                                         @break
 
@@ -87,38 +87,80 @@
                                                 <div class="py-1">
                                                     <span
                                                         class="inline-flex w-20 h-7 justify-center bg-transparent text-sm font-medium">
-                                                        Silakan ambil buku di perpustakaan</span>
+                                                        Silakan ambil buku di perpustakaan
+                                                    </span>
                                                 </div>
                                                 <div class="flex mt-4 items-center justify-center">
-                                                    <button class="btn" onclick="my_modal_3.showModal()"><span
-                                                            class="iconify w-12 h-12 bg-blue-400 rounded-lg p-2"
-                                                            data-icon="grommet-icons:qr"></span></button>
-                                                    <dialog id="my_modal_3" class="modal rounded-xl">
-                                                        <div class="modal-box p-20 overflow-hidden">
-                                                            <form method="dialog">
-                                                                <button
-                                                                    class="btn btn-sm btn-circle btn-ghost absolute right-5 top-5"><span
-                                                                        class="iconify w-8 h-8 text-red-500"
-                                                                        data-icon="mdi:cancel-bold"></span></button>
-                                                            </form>
-                                                            <div class="flex flex-col items-center gap-1">
-                                                                <span class="text-xl font-medium">QR Peminjaman</span>
+                                                    <!-- Tombol untuk membuka modal QR - HAPUS onclick -->
+                                                    <button type="button" class="btn btn-qr"
+                                                        data-modal="modal-qr-{{ $loan->id }}">
+                                                        <span class="iconify w-12 h-12 bg-blue-400 rounded-lg p-2"
+                                                            data-icon="grommet-icons:qr"></span>
+                                                    </button>
+
+                                                    <!-- Modal QR Code -->
+                                                    <dialog id="modal-qr-{{ $loan->id }}" class="modal rounded-xl qr-modal">
+                                                        <div class="modal-box p-6">
+                                                            <div class="flex justify-between items-center mb-4">
+                                                                <h3 class="text-lg font-bold">QR Peminjaman</h3>
+                                                                <button type="button" data-modal="modal-qr-{{ $loan->id }}"
+                                                                    class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4 close-qr-modal">
+                                                                    <span class="iconify w-6 h-6 text-red-500"
+                                                                        data-icon="mdi:cancel-bold"></span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="flex flex-col items-center gap-4">
                                                                 <img src="{{ $loan->qr_path ? asset('storage/' . $loan->qr_path) : asset('images/placeholder.png') }}"
-                                                                    alt="QR" class="w-64 h-64">
-                                                                <span class="text-xl font-medium">Tunjukkan QR code ini kepada
-                                                                    petugas</span>
+                                                                    alt="QR Code Peminjaman" class="w-64 h-64 object-contain">
+                                                                <p class="text-center font-medium">Tunjukkan QR code ini kepada
+                                                                    petugas</p>
                                                             </div>
                                                         </div>
+
                                                     </dialog>
                                                 </div>
                                             </div>
                                         @break
 
                                         @case('borrowed')
-                                            <div class="flex flex-col items-center gap-1">
-                                                <span class="text-xs font-medium">QR Pengembalian</span>
-                                                <img src="{{ $loan->qr_path ? asset('storage/' . $loan->qr_path) : asset('images/placeholder.png') }}"
-                                                    alt="QR" class="w-20 h-20">
+                                            <div class="flex grid grid-rows-2 justify-center py-2">
+                                                <div class="py-1">
+                                                    <span
+                                                        class="inline-flex w-20 h-7 justify-center bg-transparent text-sm font-medium">
+                                                        Silakan kembalikan buku di perpustakaan
+                                                    </span>
+                                                </div>
+                                                <div class="flex mt-6 items-center justify-center">
+                                                    <!-- Tombol untuk membuka modal QR - HAPUS onclick -->
+                                                    <button type="button" class="btn btn-qr"
+                                                        data-modal="modal-qr-{{ $loan->id }}">
+                                                        <span class="iconify w-12 h-12 bg-green-400 rounded-lg p-2"
+                                                            data-icon="grommet-icons:qr"></span>
+                                                    </button>
+
+                                                    <!-- Modal QR Code -->
+                                                    <dialog id="modal-qr-{{ $loan->id }}"
+                                                        class="modal rounded-xl qr-modal">
+                                                        <div class="modal-box p-6">
+                                                            <div class="flex justify-between items-center mb-4">
+                                                                <h3 class="text-lg font-bold">QR Pengembalian</h3>
+                                                                <button type="button"
+                                                                    data-modal="modal-qr-{{ $loan->id }}"
+                                                                    class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4 close-qr-modal">
+                                                                    <span class="iconify w-6 h-6 text-red-500"
+                                                                        data-icon="mdi:cancel-bold"></span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="flex flex-col items-center gap-4">
+                                                                <img src="{{ $loan->qr_path ? asset('storage/' . $loan->qr_path) : asset('images/placeholder.png') }}"
+                                                                    alt="QR Code Peminjaman" class="w-64 h-64 object-contain">
+                                                                <p class="text-center font-medium">Tunjukkan QR code ini kepada
+                                                                    petugas</p>
+                                                            </div>
+                                                        </div>
+
+                                                    </dialog>
+                                                </div>
                                             </div>
                                         @break
 
