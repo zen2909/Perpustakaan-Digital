@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Loan;
+use App\Models\Setting;
 use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -66,6 +67,10 @@ class LoanService
             ]);
         }
 
+        if ($loan->qr_path) {
+            Storage::disk('public')->delete($loan->qr_path);
+        }
+
         $renderer = new ImageRenderer(
             new RendererStyle(400),
             new ImagickImageBackEnd()
@@ -86,7 +91,7 @@ class LoanService
         $loan->update([
             'status' => 'borrowed',
             'loan_date' => now(),
-            'due_date' => now()->addMinutes(config('library.loan_duration_testing')),
+            'due_date' => now()->addMinutes(Setting::getValue('loan_duration_testing', 2)),
             'qr_path' => $qrPath,
             'token_return' => $token_return,
         ]);
@@ -102,41 +107,57 @@ class LoanService
             ]);
         }
 
+        $fine_status = null;
+
+        if ($loan->status === 'overdue') {
+            $fine_status = 'unpaid';
+        }
+
+        $returnDate = now();
+
+        $fine = $this->calculateFine($loan, $returnDate);
+
         $loan->update([
             'status' => 'returned',
-            'return_date' => now(),
-            'fine_amount' => $this->calculateFine($loan),
+            'return_date' => $returnDate,
+            'fine_amount' => $fine,
+            'fine_status' => $fine_status,
         ]);
 
         return $loan;
     }
 
-    protected function calculateFine(Loan $loan): int
+    protected function calculateFine(Loan $loan, $returnDate): int
     {
-        if (!$loan->return_date || !$loan->due_date) {
+        if (!$loan->due_date) {
             return 0;
         }
 
-        if ($loan->return_date <= $loan->due_date) {
+        if ($returnDate->lessThanOrEqualTo($loan->due_date)) {
             return 0;
         }
 
-        $daysLate = $loan->due_date->diffInDays($loan->return_date);
+        $minutesLate = $loan->due_date->diffInMinutes($loan->return_date);
 
-        $finePerDay = setting('fine_per_day', 1000);
+        $finePerMinute = Setting::getValue('fine_per_minute', 1000);
 
-        return $daysLate * $finePerDay;
+        return $minutesLate * $finePerMinute;
     }
 
     public function markAsOverdue(Loan $loan): Loan
     {
-        if ($loan->status != 'borrowed' || $loan->due_date == null || $loan->due_date >= isFuture()) {
-            return null;
+        if (
+            $loan->status !== 'borrowed' ||
+            $loan->due_date === null ||
+            $loan->due_date->isFuture()
+        ) {
+            return $loan;
         }
 
         $loan->update([
             'status' => 'overdue',
         ]);
+
         return $loan;
     }
 

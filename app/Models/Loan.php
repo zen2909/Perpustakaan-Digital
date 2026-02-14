@@ -23,7 +23,10 @@ class Loan extends Model
         'qr_path',
         'qr_token',
         'token_return',
-        'overdue_notified_at'
+        'overdue_notified_at',
+        'payment_token',
+        'payment_method',
+        'fine_status'
     ];
 
     protected $casts = [
@@ -42,5 +45,11 @@ class Loan extends Model
     {
         return $this->belongsTo(Book::class);
     }
+
+    public function payments()
+    {
+        return $this->hasMany(PaymentsFine::class);
+    }
+
 
 }

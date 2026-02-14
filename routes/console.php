@@ -8,5 +8,5 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-Schedule::command('loan:check-overdue')->hourly();
-Schedule::command('loan:send-reminder')->daily();
+Schedule::command('loans:check-overdue')->everyMinute();
+Schedule::command('loans:send-reminder')->daily();

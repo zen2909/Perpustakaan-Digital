@@ -31,8 +31,9 @@
                                 <td class="border px-2 py-1 text-center first-letter:uppercase truncate">
                                     {{ $loan->book->title }}
                                 </td>
-                                <td class="border py-1 text-center">{{ $loan->created_at->format('d M Y') }}</td>
-                                <td class="border py-1 text-center">{{ $loan->due_date?->format('d M Y') ?? '-' }}</td>
+                                <td class="border py-1 text-center">{{ $loan->created_at?->format('d M Y H:i') }}</td>
+                                <td class="border py-1 text-center">{{ $loan->due_date?->format('d M Y H:i') ?? '-' }}
+                                </td>
                                 <td class="border px-2 py-1 text-center truncate">
                                     @switch($loan->status)
                                         @case('pending')
@@ -56,7 +57,7 @@
                                         @case('overdue')
                                             <span
                                                 class="inline-flex w-20 h-10 justify-center items-center text-center bg-white py-1 text-sm text-red-400 font-medium">
-                                                terlambat</span>
+                                                Terlambat</span>
                                         @break
 
                                         @case('returned')

@@ -87,28 +87,27 @@ class Setting extends Model
      */
     public function getValueAttribute($value)
     {
-        // Coba decode JSON
+        // JSON
         $decoded = json_decode($value, true);
         if (json_last_error() === JSON_ERROR_NONE) {
             return $decoded;
         }
 
-        // Coba parse sebagai boolean
+        // Boolean
         if ($value === 'true' || $value === 'false') {
             return filter_var($value, FILTER_VALIDATE_BOOLEAN);
         }
 
-        // Coba parse sebagai integer
+        // Float
+        if (is_numeric($value) && str_contains($value, '.')) {
+            return (float) $value;
+        }
+
+        // Integer
         if (is_numeric($value)) {
             return (int) $value;
         }
 
-        // Coba parse sebagai float
-        if (is_numeric($value) && strpos($value, '.') !== false) {
-            return (float) $value;
-        }
-
-        // Return sebagai string
         return $value;
     }
 

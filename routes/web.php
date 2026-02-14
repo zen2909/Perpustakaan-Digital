@@ -7,6 +7,7 @@ use App\Http\Controllers\admin\LoanController;
 use App\Http\Controllers\admin\ProfileController;
 use App\Http\Controllers\member\CatalogController;
 use App\Http\Controllers\admin\LoanApprovalController;
+use App\Http\Controllers\PaymentFineController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -47,11 +48,16 @@ Route::middleware('auth')->group(function () {
         Route::get('/catalogs', [CatalogController::class, 'index'])->name('members.catalog');
         Route::post('/catalogs', [LoanController::class, 'store'])->name('members.store');
         Route::get('/my-loans', [LoanController::class, 'index'])->name('members.loan');
+        Route::post('/loans/{loan}/pay-fine', [PaymentFineController::class, 'create'])->name('loans.payFine');
     });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+
+
+
 
 require __DIR__ . '/auth.php';

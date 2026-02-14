@@ -15,7 +15,7 @@ class CheckOverdueLoans extends Command
      *
      * @var string
      */
-    protected $signature = 'loan:check-overdue';
+    protected $signature = 'loans:check-overdue';
 
     /**
      * The console command description.
@@ -48,8 +48,6 @@ class CheckOverdueLoans extends Command
         foreach ($loans as $loan) {
             try {
                 $this->loanService->markAsOverdue($loan);
-                Mail::to($loan->user->email)
-                    ->send(new LoanOverdueMail($loan));
                 $loan->update(['overdue_notified_at' => now()]);
                 $this->info("Loan ID {$loan->id} marked as overdue.");
             } catch (\Throwable $th) {
